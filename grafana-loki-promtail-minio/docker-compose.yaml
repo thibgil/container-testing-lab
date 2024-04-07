@@ -187,8 +187,17 @@ services:
     networks:
       - loki
 
-  flog:
-    image: mingrammer/flog
-    command: -f json -d 200ms -l
-    networks:
-      - loki
+  #flog:
+  #  image: mingrammer/flog
+  #  command: -f json -d 200ms -l
+  #  networks:
+  #    - loki
+
+  nginx_server:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx_server/nginx.conf:/etc/nginx/sites-available/nginx.conf
+
+

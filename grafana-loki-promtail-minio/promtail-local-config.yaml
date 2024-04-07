@@ -19,4 +19,24 @@ scrape_configs:
       - source_labels: ['__meta_docker_container_name']
         regex: '/(.*)'
         target_label: 'container'
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(?P<timestamp>\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2} \+\d{4})\] "(?P<request_method>[A-Z]+) (?P<request_path>.*?) HTTP/\d\.\d" (?P<status_code>\d{3}) (?P<bytes_sent>\d+) "(?P<referrer>.*?)" "(?P<user_agent>.*?)" "(?P<extra_field>.*)"'
+      - labels:
+          ip: 
+          timestamp:
+          request_method: 
+          request_path: 
+          status_code: 
+          bytes_sent: 
+          referrer: 
+          user_agent:
+      - template:
+          source: output_msg
+          template: 'Ip est {{ .ip }} et timestamp est {{ .timestamp }}'
+      - output:
+          source: output_msg
 
+      #- replace:
+      #    expression: '^(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(?P<timestamp>\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2} \+\d{4})\] "(?P<request_method>[A-Z]+) (?P<request_path>.*?) HTTP/\d\.\d" (?P<status_code>\d{3}) (?P<bytes_sent>\d+) "(?P<referrer>.*?)" "(?P<user_agent>.*?)" "(?P<extra_field>.*)"'
+      #    replace: 'IP est {{ .ip }}'
