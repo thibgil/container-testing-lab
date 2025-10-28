@@ -1,5 +1,5 @@
 <html>
-    <h1>Team:</h1>
+    <h1>Team members:</h1>
     <ul>
         <?php
             $json = file_get_contents('http://players/');
