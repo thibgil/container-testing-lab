@@ -1,0 +1,44 @@
+version: "3"
+
+networks:
+  core:
+    driver: bridge
+  site:
+    driver: bridge
+
+services:
+  db:
+    build: ./db
+    networks:
+      - core
+  apparel:
+    build: ./apparel
+    volumes:
+      - ./apparel:/app
+    networks:
+      - core
+    ports:
+      - 5001:80
+    depends_on:
+      - db
+  prices:
+    build: ./prices
+    volumes:
+      - ./prices:/app
+    networks:
+      - core
+      - site
+    ports:
+      - 5002:80
+    depends_on:
+      - apparel
+  site:
+    build: ./site
+    volumes:
+      - ./site:/src
+    networks:
+      - site
+    ports:
+      - 5000:80
+    depends_on:
+      - prices
